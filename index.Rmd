@@ -5,67 +5,79 @@ output: html_document
 
 ### Introduction
 
-An introduction of the problem domain and a description of the variable(s) you are choosing to analyze (and why!)
+- The data set provides details information and data on the incarceration trends from 1970 to 2018 for the entire United States. I choose to analyze the average number of prison population by race for a certain period of time such as from 2000-2018 and 2008-2018 (10-year period). For chart 1, I want to see the overtime trend of the average number of prisoners from Asian American, Latinx, and Native America thorough a 18-year period. For chart 2, I wan to test my assumption on the average number of Black and White prisoners in a 10-year period from 2008 to 2018. I choose these variables because I want to test my assumptions. For example, I was assuming that the number of Black prisoners will be larger than the number of White prisoners, but running an actual test and the graph shows that my assumption was wrong. Other than that, I also want to know how the number of prisoners are distributed geographically, that's why I find out the state which has the highest/ lowest number of prisoners, not only for states, I also find the top 5 counties with the highest number of prisoners, ratio of black and total prisoners, etc. After analyzing such variables, I have a better understanding of the incarceration trends within a certain period of time of my choice.
 
 ### Summary Information
 
-Write a summary paragraph of findings that includes the 5 values calculated from your summary information R script
+```{r summary info, echo = FALSE, message = FALSE}
+source("summary.R") 
+```
+- The 5 values I calculated are states has the highest/ lowest number of prisoners, top 5 county with highest number of prisoners, ratio of black prisoners and total prisoners (15-64 years old) per year from 2008 to 2018, top 3 regions has the highest number of prisoners, and number of prison population by 3 race: Asian American, Latinx, and Native American from 1970-2018. 
 
-These will likely be calculated using your DPLYR skills, answering questions such as: 
+- I found the state which has the highest number of prisoners `r high_state`. Then I compare it with the state which has the lowest number of prisoners `r low_state`. I was quite surprise to find out that the TX with highest number of prisoners is in the South Central region of the US, and it's far away from the DC with lowest number of prisoners (Pacific Northwest of the Western US).
 
-- What is the average value of my variable across all the counties (in the current year)?
-- Where is my variable the highest / lowest?
-- How much has my variable change over the last N years?
+- Moreover, I also found the top 5 counties which has the highest number of prisoners:
+ `r high_county[1]`
+ `r high_county[2]`
+ `r high_county[3]`
+ `r high_county[4]`
+ `r high_county[5]`
+- These counties are mostly from the Northwest region of the United States. 
 
-Feel free to calculate and report values that you find relevant. Again, remember that the purpose is to think about how these measure of incarceration vary by race.
+- I also found the pattern of ratio of black prisoners and total prisoners (15-64 years old) per year from 2008 to 2018 
+`r ratio_black_total`. 
+- It's really interesting to see the ratio increases over time.
+
+- On top of that, my finding of top 3 regions with highest number of prisoners `r high_region` really reflects on my previous findings. Like I said, most prisoners are in the West of the US. The top 3 results also indicates that fact with "South", "Midwest" and "West".
+
+- Lastly, I found trend over time of number of prison population by 3 race: Asian American, Latinx, and Native American from 1970-2018, being `r trend_over_time_3_races`. The data shows the major different in the number of prisoners by race. I also have them in order from top to bottom (which race has the highest number of prisoners is the TOP). It's clear that in this group, Asian American has the highest number of prisoners over time, then Latinx, and lastly is Native American.
 
 ### The Dataset
 
-Who collected the data?  
+Who collected the data? 
+- Bureau of Justice Statistics (BJS) data collections funded by Robert W. Wilson Charitable Trust
+
 How was the data collected or generated?  
+- The prison variables draw on the National Correction Reporting Program (NCRP) (collect individual data on admissions and releases since 1983) and directly from state departments of correction is NCRP data is not available or is unreliable. 
+- The jails data draws on the Annual Survey of Jails (ASJ)(samples of counties since 1982), Census of Jails (COJ)(data on all counties since its first collection in 1970), and population and admissions variables from Death in Custody Reporting Program (DCRP) (facility-level jail population and admissions data 2000-2013). The ASJ and COJ are combines to create jail variables.
+-Separate variables are created using DCRP data.
+- Dataset also includes the population estimates collected by the US Census Bureau and the Centers for Disease Control and Prevention (CDC), geographic information from USDA. 
+32
+
 Why was the data collected?  
+- To provide detail on the sources and variables in the Incarceration Trends over time for the entire US.
+This involves county-level data on prison and jail incarceration and related measures as well.
+
 How many observations (rows) are in your data?  
+- 153811 rows
+
 How many features (columns) are in the data?  
+` 121 columns
+
 What, if any, ethical questions or questions of power do you need to consider when working with this data?  
-What are possible limitations or problems with this data?   (at least 200 words)
+- Does black race or white race have a higher number of prisoners? Potential reasons?
+
+What are possible limitations or problems with this data?  
+- Overall there is not much of a problem working with the dataset since it already quite structured; however, I could still do some data cleaning before actually using the dataset to narrow my focus. Firstly, there are null outcomes for starting from column total_j1ail_pop till the end, this means the comparison between these groups will be affected by the range and how many null values it has. A lot of information lead to a lot of potential analysis so it might be a challenge for me to fully understand, come up with specific columns to work with, and think of potential chart/ maps to work on. So first, I have to clean records where it is null for consistency. On top of that, there are a lot of missing values starting from aapi_pop_15to64 till the end. I need to pay extra attention when working with these Race columns and always ignore NA values. 
+-  My plan to tackle this dataset is first to narrow down my focus the comparison of number of prisoners between races, with the elimination of null values. Having a plan will help me limit the problems of having too many ideas for a big dataset such as this one.
 
 
 ### Trends Over Time Chart
 
-Include a chart. Make sure to describe why you included the chart, and what patterns emerged
-
-The first chart that you will create and include will show the trend over time of your variable/topic. Think carefully about what you want to communicate to your user (you may have to find relevant trends in the dataset first!). Here are some requirements to help guide your design:
-
-- Show more than one, but fewer than ~10 trends
-  - This may mean showing the same measure for different locations or different racial groups. Think carefully about a meaningful comparison of locations (e.g., the top 10 counties in a state, top 10 states, etc.)
-- You must have clear x and y axis labels
-- The chart needs a clear title 
-- You need a legend for your different line colors and a clear legend title
-
-When we say "clear" or "human readable" titles and labels, that means that you should not just display the variable name.
-
-Here's an example of how to run an R script inside an RMarkdown file:
-
-``````{r, echo = FALSE, code = readLines("chart1_example.R")}
+```{r, echo = FALSE, warning = FALSE, message = FALSE, code = readLines("chart1_example.R")}
 ```
+
+- This chart shows us how drastically the average number of prisoners increased throughout 20000-2018 and the difference between races: Asian American, Latinx, and Native American. I can see that there is a drastic difference between Latinx and the rest races, but I also notice that there is a quite low average number of Native American prisoners, there is no noticeable increases over a 18-year period for this race.Overall, I can tell by the chart that as the years progresses, more and more prisoners are in the US, which is a not so great. The purpose of this chart is to visualize how the average number of prisoners between these 3 races has changed throughout the years. 
 
 ### Variable Comparison Chart
 
-Include a chart. Make sure to describe why you included the chart, and what patterns emerged
+```{r, echo = FALSE, code = readLines("chart2_example.R")}
+```
 
-The second chart that you will create and include will show how two different (continuous) variables are related to one another. Again, think carefully about what such a comparison means and what you want to communicate to your user (you may have to find relevant trends in the dataset first!). Here are some requirements to help guide your design:
-
-- You must have clear x and y axis labels
-- The chart needs a clear title 
-- If you choose to add a color encoding (not required), you need a legend for your different color and a clear legend title
+- This chart aims to visually represent the average number of prison population of Black people and White people. One bar, labeled at 'Black' is the number of black prisoners in the data set, and the bar labeled as 'White' does the same, but for white prisoners. Looking at the chart, it can be seen that there is a much higher number of White prisoners There is a huge different (10 times difference) in the average prison population, we had more white prisoners compared to black prisoners from 2008-2018. It also shows that the number of average prison population (Black race) increases gradually while there is a slight decrease in the White prison population.
 
 ### Map
+```{r, echo = FALSE, warning = FALSE, message = FALSE, code = readLines("map_example.R")}
+```
 
-Include a chart. Make sure to describe why you included the chart, and what patterns emerged
-
-The last chart that you will create and include will show how a variable is distributed geographically. Again, think carefully about what such a comparison means and what you want to communicate to your user (you may have to find relevant trends in the dataset first!). Here are some requirements to help guide your design:
-
-- Your map needs a title
-- Your color scale needs a legend with a clear label
-- Use a map based coordinate system to set the aspect ratio of your map
-- Use a minimalist theme for the map 
+- The chart shows that there is quire a small number of prison population (less than 500m) across the Northwest and Central of the United States. The prison population is distributed heavily in the West and a little bit in Midwest and Southeast. The remaining regions are distributed quite equally. Now looking at the map chart, I can confirm that my previous findings on top 3 regions with the highest number of prisoners is right. We can see that the "red" and "heavy yellow" areas (with high prison population) are in the South, Midwest, and West of the US. Especially in the Midwest, we can clearly see that it has over 1B prisoners. 
