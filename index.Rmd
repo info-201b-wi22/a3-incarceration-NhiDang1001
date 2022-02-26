@@ -52,7 +52,7 @@ How many observations (rows) are in your data?
 - 153811 rows
 
 How many features (columns) are in the data?  
-` 121 columns
+- 121 columns
 
 What, if any, ethical questions or questions of power do you need to consider when working with this data?  
 - Does black race or white race have a higher number of prisoners? Potential reasons?
